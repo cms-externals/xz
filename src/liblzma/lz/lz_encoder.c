@@ -14,6 +14,8 @@
 #include "lz_encoder.h"
 #include "lz_encoder_hash.h"
 
+#include<stdio.h>
+
 // See lz_encoder_hash.h. This is a bit hackish but avoids making
 // endianness a conditional in makefiles.
 #if defined(WORDS_BIGENDIAN) && !defined(HAVE_SMALL)
@@ -396,7 +398,9 @@ lz_encoder_init(lzma_mf *mf, lzma_allocator *allocator,
 				allocator);
 		if (mf->hash == NULL)
 			return true;
-	}
+	} else {  // we assume memory is zerod by the allocator, this is true for linux
+          memzero(mf->hash, (size_t)(mf->hash_size_sum) * sizeof(uint32_t));
+        }
 
 	mf->son = mf->hash + mf->hash_size_sum;
 	mf->cyclic_pos = 0;
@@ -407,7 +411,6 @@ lz_encoder_init(lzma_mf *mf, lzma_allocator *allocator,
 	for (uint32_t i = 0; i < hash_size_sum; ++i)
 		mf->hash[i] = EMPTY_HASH_VALUE;
 */
-	memzero(mf->hash, (size_t)(mf->hash_size_sum) * sizeof(uint32_t));
 
 	// We don't need to initialize mf->son, but not doing that will
 	// make Valgrind complain in normalization (see normalize() in
