@@ -47,7 +47,7 @@ lzma_alloc(size_t size, lzma_allocator *allocator)
 	if (allocator != NULL && allocator->alloc != NULL)
 		ptr = allocator->alloc(allocator->opaque, 1, size);
 	else
-		ptr = malloc(size);
+		ptr = calloc(size,1);
 
 	return ptr;
 }
