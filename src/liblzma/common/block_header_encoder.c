@@ -12,7 +12,7 @@
 
 #include "common.h"
 #include "check.h"
-
+#include <stdio.h>
 
 extern LZMA_API(lzma_ret)
 lzma_block_header_size(lzma_block *block)
